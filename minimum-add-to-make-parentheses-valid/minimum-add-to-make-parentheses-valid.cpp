@@ -1,19 +1,13 @@
 class Solution {
 public:
     int minAddToMakeValid(string s) {
-        int numLeft = 0;
-        int numRight = 0;
-        for (char &c : s) { 
-            if (c == '(') {
-                numLeft++;
-            } else {
-                if (numLeft == 0) {
-                    numRight++;
-                } else {
-                    numLeft--;
-                }
-            }
+        int lefts = 0, stack = 0;
+        
+        for (char c : s) {
+            if (c == '(') stack++;
+            else if (c == ')' && stack == 0) lefts++;
+            else stack--;
         }
-        return numRight + numLeft;
+        return lefts + stack;
     }
 };
