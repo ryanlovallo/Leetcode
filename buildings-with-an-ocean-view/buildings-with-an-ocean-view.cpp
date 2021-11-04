@@ -1,20 +1,13 @@
 class Solution {
 public:
     vector<int> findBuildings(vector<int>& heights) {
-        int n = heights.size();
-        vector<int> sufSum(n); 
-        
-        sufSum.back() = 0;
-        
-        for (int i = n-2; i >= 0; --i) {
-            sufSum[i] = max(sufSum[i+1], heights[i+1]);
-        }
-        
+        int rightMax = INT_MIN;
         vector<int> res;
-        
-        for (int i = 0; i < n; ++i) {
-            if (heights[i] > sufSum[i]) res.push_back(i);
+        for (int i = heights.size()-1; i >= 0; --i) {
+            if (heights[i] > rightMax) res.push_back(i);
+            rightMax = max(rightMax, heights[i]);
         }
+        reverse(res.begin(), res.end());
         return res;
     }
 };
