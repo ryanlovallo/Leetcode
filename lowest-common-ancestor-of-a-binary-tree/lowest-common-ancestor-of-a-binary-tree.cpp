@@ -11,26 +11,18 @@ class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
         return dfs(root, p, q);
+        
     }
     
     TreeNode* dfs(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if (!root) return nullptr;
+        if (!root || root == q || root == p) return root;
         
-        if (root == p || root == q) return root;
+        TreeNode* left = dfs(root->left, p, q);
+        TreeNode* right = dfs(root->right, p, q);
         
-        TreeNode* l = dfs(root->left, p, q);
-        TreeNode* r = dfs(root->right, p, q);
-        
-        if (l && r) return root;
-        return (l) ? l : r;
-        /*
-        if root = p or root = q
-            return root
-        left = dfs(root->left)
-        right = dfs(root->right)
-        
-        if (left && right) return root
-        return (left) ? left : right;
-        */
+        if (left && right) return root;
+        else return (left) ? left : right;
     }
+    
+   
 };
