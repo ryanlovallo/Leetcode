@@ -15,12 +15,12 @@ public:
     int index;
     
     BSTIterator(TreeNode* root) {
+        TreeNode* cur = root;
         index = -1;
         stack<TreeNode*> s;
-
-        TreeNode* cur = root;
+        
         while(cur || !s.empty()) {
-            while(cur) {
+            while (cur) {
                 s.push(cur);
                 cur = cur->left;
             }
@@ -28,6 +28,7 @@ public:
             s.pop();
             inorder.push_back(cur->val);
             cur = cur->right;
+            
         }
     }
     
