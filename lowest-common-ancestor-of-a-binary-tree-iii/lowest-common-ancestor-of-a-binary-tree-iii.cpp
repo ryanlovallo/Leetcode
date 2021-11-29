@@ -12,16 +12,16 @@ public:
 class Solution {
 public:
     Node* lowestCommonAncestor(Node* p, Node * q) {
-        unordered_set<int> seen;
-        Node* first = dfs(p, q, seen);
-        return (first) ? first : dfs(q, p, seen);
-    }
-    
-    Node* dfs(Node* n, Node* find, unordered_set<int> &seen) {
-        if (!n) return nullptr;
+        Node* pNode = p;
+        Node* qNode = q;
         
-        if (n == find || seen.find(n->val) != seen.end()) return n;
-        seen.insert(n->val);
-        return dfs(n->parent, find, seen);
+        while (qNode != pNode) {
+            if (!pNode->parent) pNode = q;
+            else pNode = pNode->parent;
+            
+            if (!qNode->parent) qNode = p;
+            else qNode = qNode->parent;
+        }
+        return pNode;
     }
 };
