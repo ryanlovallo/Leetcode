@@ -25,39 +25,31 @@ public:
 class Solution {
 public:
     
+    Node* prev;
     Node* first;
     Node* last;
     
     Node* treeToDoublyList(Node* root) {
         if (!root) return nullptr;
-        first = nullptr;
-        last = nullptr;
-        getOrder(root);
-        first->left = last;
-        last->right = first;
+        inorder(root);
+        
+        prev->right = first;
+        first->left = prev;
         return first;
     }
     
-    void getOrder(Node* root) {
+    void inorder(Node* root) {
         if (!root) return;
         
-        getOrder(root->left);
+        inorder(root->left);
         
-        if (first) {
-            last->right = root;
-            root->left = last;
-        } else {
+        if (!prev) {
             first = root;
+        } else {
+            prev->right = root;
+            root->left = prev;
         }
-        
-        last = root;
-        getOrder(root->right);
-    } 
+        prev = root;
+        inorder(root->right);
+    }
 };
-
-
-
-
-
-
-
