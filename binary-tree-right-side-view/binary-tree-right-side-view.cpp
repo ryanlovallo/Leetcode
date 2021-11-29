@@ -11,28 +11,23 @@
  */
 class Solution {
 public:
+    unordered_set<int> depths;
     vector<int> rightSideView(TreeNode* root) {
-        if (!root) return {};
-  
-        queue<pair<TreeNode*, int>> q;
-        q.push(make_pair(root, 0));
-        unordered_set<int> layersSeen;
+        // cur, right, left
+        
         vector<int> res;
-
-        while(!q.empty()) {
-            pair<TreeNode*, int> cur = q.front(); 
-            q.pop();
-            if (layersSeen.find(cur.second) == layersSeen.end()) {
-                res.push_back(cur.first->val);
-                layersSeen.insert(cur.second);
-            }
-            if (cur.first->right) {
-                q.push(make_pair(cur.first->right, cur.second + 1)); 
-            } 
-            if (cur.first->left) {
-                q.push(make_pair(cur.first->left, cur.second + 1)); 
-            } 
-        }
+        dfs(root, 0, res);
         return res;
+    }
+    
+    void dfs(TreeNode* root, int depth, vector<int>& res) {
+        if (!root) return;
+        
+        if (depths.find(depth) == depths.end()) {
+            depths.insert(depth);
+            res.push_back(root->val);
+        }
+        dfs(root->right, depth + 1, res);
+        dfs(root->left, depth + 1, res);
     }
 };
