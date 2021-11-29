@@ -1,25 +1,24 @@
 class Solution {
 public:
-    vector<int> prefixSum;
+    
+    vector<int> sums;
+    
     Solution(vector<int>& w) {
-        for (int &n : w) {
-            if (prefixSum.empty()) {
-                prefixSum.push_back(n);
-            } else {
-                prefixSum.push_back(prefixSum.back() + n);
-            }
+        int sum = 0;
+        sums.resize(w.size());
+        for (int i = 0; i < w.size(); ++i) {
+            sum += w[i];
+            sums[i] = sum;
         }
     }
     
     int pickIndex() {
-        int r = rand() % prefixSum.back();
+        int rando = rand() % sums.back();
         
-        for (int i = 0; i < prefixSum.size(); ++i) {
-            if (r < prefixSum[i]) {
-                return i;
-            }
+        for (int i = 0; i < sums.size(); ++i) {
+            if (rando < sums[i]) return i;
         }
-        return prefixSum.size()-1;
+        return 0;
     }
 };
 
