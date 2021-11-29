@@ -1,39 +1,29 @@
 class Solution {
 public:
     int findKthLargest(vector<int>& nums, int k) {
-        int left = 0, right = nums.size()-1;
-        int index;
-        while (left <= right) {
-            index = partition(nums, left, right);
-            
-            if (index == nums.size() - k) {
-                return nums[index];
-            }
-            
-            if (index > nums.size() - k) {
-                right = index - 1;
+        int l = 0, r = nums.size()-1, target = nums.size()-k, index;
+        
+        while (l < r) {
+            index = partition(nums, l, r);
+            if (index > target) {
+                r = index-1;
             } else {
-                left = index + 1;
+                l = index;
             }
         }
-        return nums[index];
-        
+        return nums[l];
     }
     
-    int partition(vector<int>& nums, int start, int end) {
-        if (end <= start) {
-            return start;
-        }
+    int partition(vector<int>& nums, int left, int right) {
+        int p = left, target = nums[right];
         
-        int pivot = start, target = nums[end];
-        
-        for (int i = start; i < end; ++i) {
-            if (nums[i] < target) {
-                swap(nums[pivot], nums[i]);
-                ++pivot;
-            }
+        for (int i = left; i < right; ++i) {
+            if (nums[i] <= target) {
+                swap(nums[i], nums[p]);
+                p++;
+            } 
         }
-        swap(nums[pivot], nums[end]);
-        return pivot;
+        swap(nums[p], nums[right]);
+        return p;
     }
 };
