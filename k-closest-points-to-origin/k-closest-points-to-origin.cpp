@@ -5,9 +5,8 @@ public:
         while (l < r) {
             pivot = partition(points, l, r);
             
-            if (pivot == k) {
-                break;
-            } else if (pivot > k) {
+            if (pivot == k) break;
+            else if (pivot > k) {
                 r = pivot-1;
             } else {
                 l = pivot+1;
