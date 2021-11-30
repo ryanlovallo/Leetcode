@@ -1,61 +1,48 @@
 class Solution {
 public:
     
-    unordered_map<int,int> sizes; // #grid id --> size
+    vector<int> rv = {0, 1, 0, -1};
+    vector<int> cv = {1, 0, -1, 0};
+    unordered_map<int, int> areaSizes;  // group # --> size of group
+    
     int largestIsland(vector<vector<int>>& grid) {
-        int rows = grid.size(), cols = grid[0].size();
-        int id = 2;
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; ++c) {
-                if(grid[r][c] != 1) continue;
-                dfs(grid, r, c, id);
-                id++;
+        int groupNum = 2;
+        for (int i = 0; i < grid.size(); ++i) {
+            for (int j = 0; j < grid[0].size(); ++j) {
+                if (grid[i][j] != 1) continue;
+                dfs(grid, groupNum, i, j);
+                groupNum++;
             }
         }
-        int curSum, maxSum = 0;
-        bool found = false;
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; ++c) {
-                if(grid[r][c] != 0) continue;
-                found = true;
-                curSum = 0;
-                unordered_set<int> idSeen;
+        int maxArea = -1;
+        for (int i = 0; i < grid.size(); ++i) {
+            for (int j = 0; j < grid[0].size(); ++j) {
+                if (grid[i][j] != 0) continue;
                 
-                if (r-1 >= 0 && grid[r-1][c] != 0 && idSeen.find(grid[r-1][c]) == idSeen.end()) {
-                    curSum += sizes[grid[r-1][c]];
-                    idSeen.insert(grid[r-1][c]);
+                unordered_set<int> has_seen;
+                int curSum = 1;
+                for (int k = 0; k < 4; ++k) {
+                    int row = i + rv[k], col = j + cv[k];
+                    if (row < 0 || col < 0 || row >= grid.size() || col >= grid.size()) continue;
+                    if (grid[row][col] != 0 && has_seen.find(grid[row][col]) == has_seen.end()) {
+                        curSum += areaSizes[grid[row][col]];
+                        has_seen.insert(grid[row][col]);
+                    }
                 }
-                if (r+1 < rows && grid[r+1][c] != 0 && idSeen.find(grid[r+1][c]) == idSeen.end()) {
-                    curSum += sizes[grid[r+1][c]];
-                    idSeen.insert(grid[r+1][c]);
-                }
-                if (c-1 >= 0 && grid[r][c-1] != 0 && idSeen.find(grid[r][c-1]) == idSeen.end()) {
-                    curSum += sizes[grid[r][c-1]];
-                    idSeen.insert(grid[r][c-1]);
-                }
-                if (c+1 < cols && grid[r][c+1] != 0 && idSeen.find(grid[r][c+1]) == idSeen.end()) {
-                    curSum += sizes[grid[r][c+1]];
-                    idSeen.insert(grid[r][c+1]);
-                }
-                maxSum = max(maxSum, curSum+1);
+                maxArea = max(maxArea, curSum);
             }
         }
-        if (!found) return rows*cols;
-        return maxSum;
-        
-        // next dfs, check to see if there is a 0- not previous one
+        return (maxArea == -1) ? (grid.size() * grid.size()) : maxArea;
     }
     
-    void dfs(vector<vector<int>> &grid, int r, int c, int id) {
-        if (r < 0 || r >= grid.size() || c < 0 || c >= grid[0].size() || grid[r][c] != 1) return;
+    void dfs(vector<vector<int>>& grid, int groupNum, int r, int c) {
+        if (r < 0 || c < 0 || r >= grid.size() || c >= grid[0].size() || grid[r][c] != 1) return;
         
-        // we now know grid[r][c] = 1
-        grid[r][c] = id;
-        sizes[id]++;
+        grid[r][c] = groupNum;
+        areaSizes[groupNum]++;
         
-        dfs(grid, r-1, c, id);
-        dfs(grid, r+1, c, id);
-        dfs(grid, r, c-1, id);
-        dfs(grid, r, c+1, id);
+        for (int i = 0; i < 4; ++i) {
+            dfs(grid, groupNum, r + rv[i], c + cv[i]);
+        }
     }
 };
