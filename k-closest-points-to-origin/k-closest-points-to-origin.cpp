@@ -1,43 +1,37 @@
 class Solution {
 public:
     vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
-        int l = 0, r = points.size()-1, mid;
-        
+        int l = 0, r = points.size()-1, pivot;
         while (l < r) {
-            mid = partition(points, l, r);
+            pivot = partition(points, l, r);
             
-            if (mid == k) {
-                break;    
-            }
-            if (mid >= k) {
-                r = mid-1;
+            if (pivot == k) {
+                break;
+            } else if (pivot > k) {
+                r = pivot-1;
             } else {
-                l = mid+1;
+                l = pivot+1;
             }
         }
         points.resize(k);
         return points;
-        
+    }
+    
+    int dist(vector<int> point) {
+        return point[0]*point[0] + point[1]*point[1];
     }
     
     int partition(vector<vector<int>>& points, int left, int right) {
-        if (left >= right ) return left;
         int p = left;
-        int pointDist = dist(points[right][0], points[right][1]);
+        int distPivot = dist(points[right]);
         
-        for (int i = left; i < right; ++i) {
-            if (dist(points[i][0], points[i][1]) < pointDist) {
-                swap(points[p], points[i]);
-                p++;
-            } 
+        for (; left < right; ++left) {
+            if (dist(points[left]) < distPivot) {
+                swap(points[p], points[left]);
+                ++p;
+            }
         }
-        swap(points[right], points[p]);
+        swap(points[p], points[right]);
         return p;
     }
-    
-    int dist(int x, int y) {
-        return x*x + y*y;
-    }
-    
-    
 };
