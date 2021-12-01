@@ -15,3 +15,6 @@ public:
         return false;
     }
 };
+
+// https://leetcode.com/problems/continuous-subarray-sum/discuss/150330/Math-behind-the-solutions 
+// for solution- if the mod array looks like 3,5,8,6,5 - you know between the two 5s, that sum must be divisible by k
