@@ -16,6 +16,14 @@ public:
         
         int cur = (root->val >= low && root->val <= high) ? root->val : 0;
         
-        return cur + rangeSumBST(root->left, low, high) + rangeSumBST(root->right, low, high);
+        int left, right;
+        if (root->val <= low) left = 0;
+        else left = rangeSumBST(root->left, low, high);
+        
+        if (root->val >= high) right = 0;
+        else right = rangeSumBST(root->right, low, high);
+
+        
+        return cur + left + right;
     }
 };
